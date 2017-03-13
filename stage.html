@@ -1,0 +1,1038 @@
+<!--toolbox definition-->
+
+<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+ <category name = "Controls" colour="#007f00">
+ 	<block type = "start"></block>
+ 	<block type = "end"></block>
+ </category>
+ <category name = "Decisions" colour = "#0000B2">
+ 	<block type = "controls_if"></block>
+ 	<block type = "controls_whileUntil"></block>
+ 	<!--<block type = "display_variable"></block>-->
+ </category>
+ <category name="Variables" colour="#A65C81" custom="VARIABLE">
+  	<block type="math_number"></block>
+  </category>
+  <category name="Setup" colour="#a5a55b">
+  	<block type="math_number"></block>
+  	<block type="logic_compare">
+    <field name="OP">EQ</field>
+  </block>
+    <block type="variables_set">
+      <field name="VAR">earth temperature</field>
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">time</field>
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">carbon dioxide</field>
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">methane</field>
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </category>
+  <category name="Effects" colour="#551A8B">
+    <block type="increase_methane"></block>
+    <block type = "decrease_methane"></block>
+    <block type="increase_carbon_dioxide"></block>
+    <block type ="decrease_carbon_dioxide"></block>
+    <block type = "increase_cfc"></block>
+    <block type = "decrease_cfc"></block>
+    <block type="ice_melt"></block>
+    <block type="ice_forms"></block>
+  </category>
+</xml>
+
+<html>
+
+
+	<head>
+
+		<!--blockly library script files-->
+
+		<script src = "google-blockly-a65baf9/blockly_compressed.js"></script>
+		<script src = "google-blockly-a65baf9/blocks_compressed.js"></script>
+		<script src = "google-blockly-a65baf9/javascript_compressed.js"></script>
+		<script src = "google-blockly-a65baf9/msg/js/en.js"></script>
+
+		<style>
+
+			.modal{
+
+				display: none;
+				position: fixed;
+				z-index: 1;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				overflow: auto;
+				background-color: rgb(0, 0, 0);
+				background-color: rgba(0, 0, 0, 0.4);
+
+			}
+
+			.modal-content{
+
+				background-color: #DCDCDC;
+				margin: 15% auto;
+				padding: 20px;
+				border: 1px solid #888;
+				width: 80%;
+
+			}
+
+			.close{
+
+				color: #aaa;
+				float: right;
+				font-size: 28px;
+				font-weight: bold;
+			}
+
+			.close:hover,
+			.close: focus{
+
+				color: black;
+				text-decoration: none;
+
+			}
+
+			.button {
+    			background-color: #4CAF50; /* Green */
+    			border: none;
+    			color: white;
+   				padding: 15px 32px;
+    			text-align: center;
+    			text-decoration: none;
+    			display: inline-block;
+    			font-size: 16px;
+    			margin: 10px;
+			}
+
+			h1{
+
+				font-family: "Tahoma", sans-serif;
+
+			}
+
+
+		</style>
+
+		<!--custom block definition code-->
+
+		<script>
+
+		/*Blockly.Blocks['atmosphere_thicker'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("atmosphere thicker");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(180);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+ 		 }
+		};
+
+		Blockly.Blocks['atmosphere_thinner'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("atmosphere thins");
+   				this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(180);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};*/
+
+		Blockly.Blocks['increase_methane'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("increase methane");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(59);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['decrease_methane'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("decrease methane");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(59);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['increase_carbon_dioxide'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("increase carbon dioxide");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(192);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['decrease_carbon_dioxide'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("decrease carbon dioxide");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(192);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['increase_cfc'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("increase CFCs");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(260);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['decrease_cfc'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("decrease CFCs");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(260);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		Blockly.Blocks['ice_melt'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("ice melts");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(0);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};
+
+		Blockly.Blocks['ice_forms'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("ice forms");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(0);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};
+
+		Blockly.Blocks['calculate_earth_temperature'] = {
+  			init: function() {
+    			this.appendValueInput("NAME")
+        			.setCheck("Number")
+        			.appendField("calculate earth temp using");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+    			this.setColour(230);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};
+
+		Blockly.Blocks['start'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("start");
+    			this.setNextStatement(true, null);
+    			this.setColour(120);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};
+
+		Blockly.Blocks['end'] = {
+  			init: function() {
+    			this.appendDummyInput()
+        			.appendField("end");
+    			this.setPreviousStatement(true, null);
+    			this.setColour(0);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  		 }
+		};
+
+		Blockly.Blocks['display_variable'] = {
+  			init: function() {
+    			this.appendValueInput("NAME")
+        			.setCheck(null)
+       				.appendField("display variable");
+    			this.setPreviousStatement(true, null);
+    			this.setNextStatement(true, null);
+   				this.setColour(20);
+    			this.setTooltip('');
+    			this.setHelpUrl('');
+  			 }
+			};
+
+		//block generator code
+
+		/*Blockly.JavaScript['atmosphere_thicker'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "images/thin.png";\n' +
+			'var substring2 = "middle.png";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick.png"\n'+
+  			'}'
+  			;
+  		return code;
+		};
+
+		Blockly.JavaScript['atmosphere_thinner'] = function(block) {
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "middle.png";\n' +
+			'var substring2 = "images/thick.png";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle.png"\n'+
+  			'}';
+  		return code;
+		};*/
+
+		Blockly.JavaScript['increase_methane'] = function(block) {
+  		// TODO: Assemble JavaScript into code variable.
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "thin_mix_full";\n' +
+			'var substring2 = "thin_carbon_full";\n' +
+			'var substring3 = "middle_mix_full";\n' +
+			'var substring4 = "middle_carbon_full";\n' +
+			'var substring5 = "thick_mix_full";\n' +
+			'var substring6 = "thick_carbon_full";\n' +
+			'var substring7 = "thin_methane_full";\n' +
+			'var substring8 = "middle_methane_full";\n' +
+			'var substring9 = "thin_methane_holes";\n' +
+			'var substring10 = "middle_methane_holes1";\n' +
+			'var substring11 = "middle_methane_holes2";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_full.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_full.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_holes1.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_holes1.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_holes2.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['decrease_methane'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "thin_mix_full";\n' +
+			'var substring2 = "thin_methane_full";\n' +
+			'var substring3 = "middle_mix_full";\n' +
+			'var substring4 = "middle_methane_full";\n' +
+			'var substring5 = "thick_mix_full";\n' +
+			'var substring6 = "thick_methane_full";\n' +
+			'var substring7 = "thin_methane_full";\n' +
+			'var substring8 = "middle_methane_full";\n' +
+			'var substring9 = "thin_methane_holes";\n' +
+			'var substring10 = "middle_methane_holes1";\n' +
+			'var substring11 = "middle_methane_holes2";\n' +
+			'var substring12 = "thick_methane_holes1";\n' +
+			'var substring13 = "thick_methane_holes2";\n' +
+			'var substring14 = "thick_methane_holes2";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_carbon_full.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/empty_atmosphere.png"\n'+
+  			'document.getElementById("earth").src="images/dead_planet.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_holes.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_holes.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_holes.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring12)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_holes1.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring13)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_holes2.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring14)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_carbon_holes.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['increase_carbon_dioxide'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "thin_mix_full";\n' +
+			'var substring2 = "thin_methane_full";\n' +
+			'var substring3 = "middle_mix_full";\n' +
+			'var substring4 = "middle_methane_full";\n' +
+			'var substring5 = "thick_mix_full";\n' +
+			'var substring6 = "thick_methane_full";\n' +
+			'var substring7 = "thin_carbon_full";\n' +
+			'var substring8 = "middle_carbon_full";\n' +
+			'var substring9 = "thin_methane_holes";\n' +
+			'var substring10 = "middle_methane_holes1";\n' +
+			'var substring11 = "middle_methane_holes2";\n' +
+			'var substring12 = "thick_methane_holes1";\n' +
+			'var substring13 = "thick_methane_holes2";\n' +
+			'var substring14 = "thick_mix_holes1";\n' +
+			'var substring15 = "thick_mix_holes2";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'console.log("hi");\n' +
+  			'document.getElementById("atmosphere").src="images/thin_carbon_full.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_full.png"\n'+
+  			'}\n'+
+  			'else if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_full.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_holes.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_holes1.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_holes2.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring12)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_holes1.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring13)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_holes2.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring14)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_holes1.png"\n'+
+  			'}\n' +
+  			'else if(source.includes(substring15)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_holes2.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['decrease_carbon_dioxide'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "thin_mix_full";\n' +
+			'var substring2 = "thin_carbon_full";\n' +
+			'var substring3 = "middle_mix_full";\n' +
+			'var substring4 = "middle_carbon_full";\n' +
+			'var substring5 = "thick_mix_full";\n' +
+			'var substring6 = "thick_carbon_full";\n' +
+			'var substring7 = "thin_carbon_full";\n' +
+			'var substring8 = "middle_carbon_full";\n' +
+			'var substring9 = "thin_mix_holes";\n' +
+			'var substring10 = "middle_carbon_holes1";\n' +
+			'var substring11 = "middle_carbon_holes2";\n' +
+			'var substring12 = "middle_mix_holes1"; \n' +
+			'var substring13 = "middle_mix_holes2"\n' +
+			'var substring14 = "thick_mix_holes1"\n' +
+			'var substring15 = "thick_mix_holes2"\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_full.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/empty_atmosphere.png"\n'+
+  			'document.getElementById("earth").src="images/dead_planet.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="thin_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="thin_methane_holes.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="thin_carbon_holes.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="thin_carbon_holes.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring12)){\n' +
+  			'document.getElementById("atmosphere").src="middle_methane_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring13)){\n' +
+  			'document.getElementById("atmosphere").src="middle_methane_holes2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring14)){\n' +
+  			'document.getElementById("atmosphere").src="thick_methane_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring15)){\n' +
+  			'document.getElementById("atmosphere").src="thick_methane_holes2.png"\n'+
+  			'}';
+
+  		return code;
+		};
+
+		Blockly.JavaScript['increase_cfc'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "thin_mix_full";\n' +
+			'var substring2 = "thin_carbon_full";\n' +
+			'var substring3 = "middle_mix_full";\n' +
+			'var substring4 = "middle_mix_holes1";\n' +
+			'var substring5 = "middle_carbon_full";\n' +
+			'var substring6 = "middle_carbon_holes1";\n' +
+			'var substring7 = "thick_mix_full";\n' +
+			'var substring8 = "thick_mix_holes1"\n' +
+			'var substring9 = "thick_carbon_full";\n' +
+			'var substring10 = "thick_carbon_holes1";\n' +
+			'var substring11 = "thick_methane_full";\n' +
+			'var substring12 = "thick_methane_holes1";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_holes.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_carbon_holes.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_holes2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_holes2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_holes_2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_holes2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring12)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_holes2.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['decrease_cfc'] = function(block) {
+
+  		var code = 'var source = document.getElementById("atmosphere").src; \n' +
+			'var substring = "middle_mix_holes1";\n' +
+			'var substring2 = "middle_carbon_holes1";\n' +
+			'var substring3 = "middle_carbon_holes2";\n' +
+			'var substring4 = "thick_mix_holes1"\n' +
+			'var substring5 = "thick_mix_holes2"\n' +
+			'var substring6 = "thick_carbon_holes1";\n' +
+			'var substring7 = "thick_carbon_holes2";\n' +
+			'var substring8 = "thick_methane_holes1";\n' +
+			'var substring9 = "thick_methane_holes2";\n' +
+			'var substring10 = "thin_mix_holes";\n' +
+			'var substring11 = "thin_carbon_holes";\n' +
+			'var substring12 = "thin_methane_holes";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_mix_full.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("atmosphere").src="images/middle_carbon_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_mix_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring7)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_carbon_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring8)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring9)){\n' +
+  			'document.getElementById("atmosphere").src="images/thick_methane_holes1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring10)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_mix_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring11)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_carbon_full.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring12)){\n' +
+  			'document.getElementById("atmosphere").src="images/thin_methane_full.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['ice_melt'] = function(block) {
+
+  		var code = 'var source = document.getElementById("earth").src; \n' +
+			'var substring = "icefull.png";\n' +
+			'var substring2 = "ice2.png";\n' +
+			'var substring3 = "ice1.png";\n' +
+			'var substring4 = "normal.png";\n' +
+			'var substring5 = "water1.png";\n' +
+			'var substring6 = "water2.png";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("earth").src="images/ice2.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("earth").src="images/ice1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("earth").src="images/normal.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("earth").src="images/water1.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("earth").src="images/water2.png"\n'+
+  			'}\n'+
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("earth").src="images/water3.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['ice_forms'] = function(block) {
+  		var code = 'var source = document.getElementById("earth").src; \n' +
+			'var substring = "water3.png";\n' +
+			'var substring2 = "water2.png";\n' +
+			'var substring3 = "water1.png";\n' +
+			'var substring4 = "normal.png";\n' +
+			'var substring5 = "ice1.png";\n' +
+			'var substring6 = "ice2.png";\n' +
+			'console.log(source);\n' +
+  			'if(source.includes(substring)){\n' +
+  			'document.getElementById("earth").src="images/water2.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring2)){\n' +
+  			'document.getElementById("earth").src="images/water1.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring3)){\n' +
+  			'document.getElementById("earth").src="images/normal.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring4)){\n' +
+  			'document.getElementById("earth").src="images/ice1.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring5)){\n' +
+  			'document.getElementById("earth").src="images/ice2.png"\n'+
+  			'}\n' +
+  			'if(source.includes(substring6)){\n' +
+  			'document.getElementById("earth").src="images/icefull.png"\n'+
+  			'}';
+  		return code;
+		};
+
+		Blockly.JavaScript['display_variable'] = function(block) {
+  		var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  		var code = '';
+  		return code;
+		};
+
+		/*Blockly.JavaScript['calculate_earth_temperature'] = function(block) {
+  		var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+		}; */
+
+		Blockly.JavaScript['start'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  		var code = '';
+  		return code;
+		};
+
+		Blockly.JavaScript['end'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  		var code = '';
+  		return code;
+		};
+
+
+
+
+		</script>
+
+		<!--style stacking of images-->
+
+		<style>
+
+			.container{
+				position: relative;
+				float: left;
+				display: inline-block;
+
+			}
+
+			.image{
+
+				position: absolute;
+
+			}
+
+		</style>
+
+	</head>
+
+
+	<body>
+
+		<!--container div definition-->
+
+
+		<div>
+
+			<!--stage div definition-->
+
+			<div style = "height: 450px; width: 400px; border: 1px solid black; background-color: #003366;" class = "container">
+
+				<img src="images/sun.png" height = "70" width = "70"/ class = "image">
+				<img src = "images/thin_mix_full.png" height = "320" width = "320" class = "image" id="atmosphere" style = "margin: 40px; padding-top: 30px">
+				<img src = "images/normal.png" height = "300" width = "300" class = "image" style = "margin: 30px; padding-top: 45px;" id = "earth"/>
+				
+				<img src='images/playbutton.png' style = "padding-top: 375px; padding-left: 305px; width: 20%; height: 15%;" onclick="generateCode()">
+
+				<!--<p id = "carbon_dioxide">Carbon Dioxide: </p>
+				<p id = "methane">Methane: </p>
+				<p id = "cfc">CFCs: </p> -->
+
+
+<!--gas level inputs
+
+				<form style = "position: absolute; bottom: 0">
+
+					Carbon Dioxide: <input type = "text" name = "co2"> <br>
+					Methane: <input type = "text" name = "ch4"> <br>
+					<input type = "submit" value = "Change Concentrations">
+
+				</form> -->
+
+			</div>
+
+		<!--blockly workspace div definition-->
+
+			<div id = "blocklyDiv" style = "height: 450px; width: 540px;" class = "container">
+
+			</div>
+
+			<!-- open the modal-->
+
+			<button id = "btn1" class = "button">Milestone 1</button>
+
+			<button id = "btn2" class = "button">Milestone 2</button>
+
+			<button id = "btn3" class = "button">Milestone 3</button>
+
+			<button id = "btn4" class = "button">Milestone 4</button>
+
+			<!--create the modal-->
+
+			<div id = "modal1" class = "modal">
+
+				<div class = "modal-content">
+					<span id = "close1">&times;</span>
+					<h1 style = "text-align: center; font-size: 25px;">Milestone 1:</h1>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Insert a start and an end block.</p>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Set <strong> variables </strong> for carbon dioxide and methane</p>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Carbon dioxide should be equal to 200 ppm. Methane should be equal to 1800 ppb. </p>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;"> Hint: Use the blocks in the "Setup" tab.</p>
+
+				</div>
+
+			</div>
+
+			<div id = "modal2" class = "modal">
+
+				<div class = "modal-content">
+					<span id = "close2">&times;</span>
+					<h1 style = "text-align: center; font-size: 25px;">Milestone 2:</h1>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Set an <strong> if statement </strong> to melt ice if carbon dioxide levels increase above 200 ppm.</p>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Hint: Use the blocks in the "Decisions" tab.</p>
+				</div>
+
+			</div>
+
+			<div id = "modal3" class = "modal">
+
+				<div class = "modal-content">
+					<span id = "close3">&times;</span>
+					<h1 style = "text-align: center; font-size: 25px;">Milestone 3:</h1>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Change the value of methane to be zero.</p>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center;">Change the way the atmosphere looks to reflect having only carbon dioxide.</p>
+				</div>
+
+			</div>
+
+			<div id = "modal4" class = "modal">
+
+				<div class = "modal-content">
+					<span id = "close4">&times;</span>
+					<h1 style = "text-align: center; font-size: 25px;">Bonus</h1>
+					<p style = "font-size: 15px; font-family: 'Verdana'; text-align: center">Change your if statement to a loop. What happens when there is no carbon dioxide? What happens when there is too much carbon dioxide? When does ice melt?</p>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<!--inject blockly into workspace-->
+
+		<script>
+  		var workspace = Blockly.inject('blocklyDiv',
+      		{toolbox: document.getElementById('toolbox')});
+
+  		function generateCode(){
+
+  			Blockly.JavaScript.addReservedWords('code');
+  			var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+  			try{
+
+  				eval(code);
+  			} catch(e){
+  				alert(e);
+
+  			}
+  			
+
+
+
+  		} // end code generate
+
+  		//modal code
+
+		var modal1=document.getElementById('modal1');
+		var btn1 = document.getElementById('btn1');
+		var span1 = document.getElementById('close1');
+
+		btn1.onclick = function(){
+
+			modal1.style.display = "block";
+
+		}
+
+		span1.onclick = function(){
+
+			modal1.style.display = "none";
+
+		}
+
+		var modal2=document.getElementById('modal2');
+		var btn2 = document.getElementById('btn2');
+		var span2 = document.getElementById('close2');
+
+		btn2.onclick = function(){
+
+			modal2.style.display = "block";
+
+		}
+
+		span2.onclick = function(){
+
+			modal2.style.display = "none";
+
+		}
+
+		var modal3=document.getElementById('modal3');
+		var btn3 = document.getElementById('btn3');
+		var span3 = document.getElementById('close3');
+
+		btn3.onclick = function(){
+
+			modal3.style.display = "block";
+
+		}
+
+		span3.onclick = function(){
+
+			modal3.style.display = "none";
+
+		}
+
+		var modal4=document.getElementById('modal4');
+		var btn4 = document.getElementById('btn4');
+		var span4 = document.getElementById('close4');
+
+		btn4.onclick = function(){
+
+			modal4.style.display = "block";
+
+		}
+
+		span4.onclick = function(){
+
+			modal4.style.display = "none";
+
+		}
+
+
+
+		window.onclick = function(event){
+
+			if(event.target == modal1){
+
+				modal.style.display = "none";
+			}
+
+			if(event.target == modal2){
+
+				modal.style.display = "none";
+			}
+
+			if(event.target == modal3){
+
+				modal.style.display = "none";
+			}
+
+			if(event.target == modal4){
+
+				modal.style.display = "none";
+			}
+		}
+
+		</script>
+
+	</body>
+
+
+
+
+
+</html>
